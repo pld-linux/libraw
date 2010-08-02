@@ -4,15 +4,16 @@
 # - Get upstream to include proper configure!
 
 %define _packname LibRaw
+%define _beta Beta3
 
 Summary:	LibRaw is a library for reading RAW files
 Name:		libraw
-Version:	0.9.1
-Release:	0.1
+Version:	0.10.0
+Release:	0.%{_beta}.1
 License:	LGPL 2.1 / CDDL 1.0 / LibRaw Software License
 Group:		Libraries
-Source0:	http://www.libraw.org/data/%{_packname}-%{version}.tar.gz
-# Source0-md5:	51931411fb4e060effe78420e754312c
+Source0:	http://www.libraw.org/data/%{_packname}-%{version}-%{_beta}.tar.gz
+# Source0-md5:	538acaec5393f0add413bf1a676b0817
 URL:		http://www.libraw.org
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -42,7 +43,7 @@ Requires:	%{name}-devel = %{version}-%{release}
 Static FOO library.
 
 %prep
-%setup -q -n %{_packname}-%{version}
+%setup -q -n %{_packname}-%{version}-%{_beta}
 
 %build
 %{__make}
