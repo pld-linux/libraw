@@ -1,19 +1,18 @@
 # TODO:
 # - Docs
-# - Figure out how to tell pkgconfig about this library
 # - Get upstream to include proper configure!
 
 %define _packname LibRaw
-%define _beta Beta3
 
 Summary:	LibRaw is a library for reading RAW files
 Name:		libraw
 Version:	0.10.0
-Release:	0.%{_beta}.1
+Release:	1
 License:	LGPL 2.1 / CDDL 1.0 / LibRaw Software License
 Group:		Libraries
-Source0:	http://www.libraw.org/data/%{_packname}-%{version}-%{_beta}.tar.gz
-# Source0-md5:	538acaec5393f0add413bf1a676b0817
+Source0:	http://www.libraw.org/data/%{_packname}-%{version}.tar.gz
+# Source0-md5:	248456748c8310c99c3593bfa6bf71be
+Patch0:		%{name}-pkgconfig.patch
 URL:		http://www.libraw.org
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -26,13 +25,19 @@ of drawbacks have already been eliminated and part will be fixed in
 future. The users of the library are provided with API to be built
 into their software programs.
 
+%package samples
+Summary:	libraw sample programs
+Group:		Applications
+
+%description samples
+LibRaw sample programs.
+
 %package devel
-Summary:	Header files for libraw
+Summary:	Header files for LibRaw
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
 
 %description devel
-Header files for FOO library.
+Static libraries and header files for LibRaw.
 
 %package static
 Summary:	Static libraw library
@@ -43,7 +48,8 @@ Requires:	%{name}-devel = %{version}-%{release}
 Static FOO library.
 
 %prep
-%setup -q -n %{_packname}-%{version}-%{_beta}
+%setup -q -n %{_packname}-%{version}
+%patch0 -p1
 
 %build
 %{__make}
@@ -54,10 +60,11 @@ rm -rf $RPM_BUILD_ROOT
 #%{__make} install \
 	#DESTDIR=$RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT/usr/{include,lib,bin}
-cp -R libraw $RPM_BUILD_ROOT/usr/include
-cp lib/libraw.a $RPM_BUILD_ROOT/usr/lib
-cp bin/[a-z]* $RPM_BUILD_ROOT/usr/bin
+install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir},%{_bindir},%{_pkgconfigdir}}
+cp -R libraw $RPM_BUILD_ROOT%{_includedir}
+install lib/libraw{,_r}.a $RPM_BUILD_ROOT%{_libdir}
+install bin/[a-z]* $RPM_BUILD_ROOT%{_bindir}
+install *.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -65,14 +72,22 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%files
+%files samples
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/libraw
+%{_pkgconfigdir}/libraw.pc
+%{_pkgconfigdir}/libraw_r.pc
+%{_libdir}/libraw.a
+%{_libdir}/libraw_r.a
 
+%if 0
+# only static library built, included in the -devel package
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libraw.a
+%{_libdir}/libraw_r.a
+%endif
