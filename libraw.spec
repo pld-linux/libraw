@@ -6,12 +6,12 @@
 
 Summary:	LibRaw is a library for reading RAW files
 Name:		libraw
-Version:	0.10.0
+Version:	0.11.3
 Release:	1
 License:	LGPL 2.1 / CDDL 1.0 / LibRaw Software License
 Group:		Libraries
 Source0:	http://www.libraw.org/data/%{_packname}-%{version}.tar.gz
-# Source0-md5:	248456748c8310c99c3593bfa6bf71be
+# Source0-md5:	16d1113166979f4f9e133e350e9e5872
 Patch0:		%{name}-pkgconfig.patch
 URL:		http://www.libraw.org
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
