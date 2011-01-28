@@ -14,6 +14,7 @@ Source0:	http://www.libraw.org/data/%{_packname}-%{version}.tar.gz
 # Source0-md5:	16d1113166979f4f9e133e350e9e5872
 Patch0:		%{name}-pkgconfig.patch
 URL:		http://www.libraw.org
+BuildRequires:	libstdc++-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
