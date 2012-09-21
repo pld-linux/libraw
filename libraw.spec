@@ -1,20 +1,17 @@
-# TODO:
-# - Docs
-# - Get upstream to include proper configure!
-
-%define _packname LibRaw
-
 Summary:	LibRaw is a library for reading RAW files
 Name:		libraw
-Version:	0.11.3
+Version:	0.14.7
 Release:	1
 License:	LGPL 2.1 / CDDL 1.0 / LibRaw Software License
 Group:		Libraries
-Source0:	http://www.libraw.org/data/%{_packname}-%{version}.tar.gz
-# Source0-md5:	16d1113166979f4f9e133e350e9e5872
-Patch0:		%{name}-pkgconfig.patch
+Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
+# Source0-md5:	8b622d82c927d8975c22ee4316584ebd
 URL:		http://www.libraw.org
 BuildRequires:	libstdc++-devel
+BuildRequires:	libgomp-devel
+BuildRequires:	jasper-devel
+BuildRequires:	libjpeg-devel
+BuildRequires:	lcms2-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -46,26 +43,23 @@ Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
-Static FOO library.
+Static libraw library.
 
 %prep
-%setup -q -n %{_packname}-%{version}
-%patch0 -p1
+%setup -q -n LibRaw-%{version}
 
 %build
+%configure \
+	LIBS="-lgomp"
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-#%{__make} install \
-	#DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir},%{_bindir},%{_pkgconfigdir}}
-cp -R libraw $RPM_BUILD_ROOT%{_includedir}
-install lib/libraw{,_r}.a $RPM_BUILD_ROOT%{_libdir}
-install bin/[a-z]* $RPM_BUILD_ROOT%{_bindir}
-install *.pc $RPM_BUILD_ROOT%{_pkgconfigdir}
+rm -r $RPM_BUILD_ROOT/%{_docdir}/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -73,22 +67,31 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
+%files
+%defattr(644,root,root,755)
+%doc README* COPYRIGHT
+%ghost %attr(755,root,root) %{_libdir}/libraw.so.5
+%attr(755,root,root) %{_libdir}/libraw.so.5.*
+%ghost %attr(755,root,root) %{_libdir}/libraw_r.so.5
+%attr(755,root,root) %{_libdir}/libraw_r.so.5.*
+
 %files samples
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 
 %files devel
 %defattr(644,root,root,755)
+%doc doc/*
 %{_includedir}/libraw
 %{_pkgconfigdir}/libraw.pc
 %{_pkgconfigdir}/libraw_r.pc
-%{_libdir}/libraw.a
-%{_libdir}/libraw_r.a
+%{_libdir}/libraw.la
+%{_libdir}/libraw_r.la
+%{_libdir}/libraw.so
+%{_libdir}/libraw_r.so
 
-%if 0
-# only static library built, included in the -devel package
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libraw.a
 %{_libdir}/libraw_r.a
-%endif
+
