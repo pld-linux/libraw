@@ -9,6 +9,7 @@ Version:	0.14.7
 Release:	2
 License:	LGPL v2.1 or CDDL v1.0 or LibRaw Software License
 Group:		Libraries
+#Source0Download: http://www.libraw.org/download#stable
 Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
 # Source0-md5:	8b622d82c927d8975c22ee4316584ebd
 URL:		http://www.libraw.org/
