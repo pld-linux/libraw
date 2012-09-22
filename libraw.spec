@@ -1,17 +1,34 @@
 #
 # Conditional build:
 %bcond_without	gomp	# OpenMP support
+%bcond_without	gpl2	# GPL v2+ demosaic pack
+%bcond_without	gpl3	# GPL v3+ demosaic pack
 #
+%if %{without gpl2}
+%undefine	gpl3
+%endif
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
 Version:	0.14.7
 Release:	2
+%if %{with gpl3}
+License:	GPL v3+
+%else
+%if %{with gpl2}
+License:	GPL v2+
+%else
 License:	LGPL v2.1 or CDDL v1.0 or LibRaw Software License
+%endif
+%endif
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
 Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
 # Source0-md5:	8b622d82c927d8975c22ee4316584ebd
+Source1:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{version}.tar.gz
+# Source1-md5:	a45c73d6bf9b4c112d5df9818e0a33f9
+Source2:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{version}.tar.gz
+# Source2-md5:	5fc14ee1fd66562cff3ee6895ca541a9
 URL:		http://www.libraw.org/
 %{?with_gomp:BuildRequires:	gcc >= 6:4.2}
 BuildRequires:	jasper-devel
@@ -79,7 +96,18 @@ Static LibRaw library.
 Statyczna biblioteka LibRaw.
 
 %prep
-%setup -q -n LibRaw-%{version}
+%setup -q -n LibRaw-%{version} %{?with_gpl2:-a1} %{?with_gpl3:-a2}
+
+%if %{with gpl2}
+for f in LibRaw-demosaic-pack-GPL2-%{version}/{COPYRIGHT,Changelog,README} ; do
+	cp -p $f $(basename $f).demosaic-pack-GPL2
+done
+%endif
+%if %{with gpl3}
+for f in LibRaw-demosaic-pack-GPL3-%{version}/{COPYRIGHT,Changelog,README} ; do
+	cp -p $f $(basename $f).demosaic-pack-GPL3
+done
+%endif
 
 %build
 %configure \
@@ -105,7 +133,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT Changelog.txt LICENSE.LibRaw.pdf README README.demosaic-packs
+%doc COPYRIGHT Changelog.txt LICENSE.LibRaw.pdf README README.demosaic-packs %{?with_gpl2:*.demosaic-pack-GPL2} %{?with_gpl3:*.demosaic-pack-GPL3}
 %lang(ru) %doc Changelog.rus README.demosaic-packs.rus
 %ghost %attr(755,root,root) %{_libdir}/libraw.so.5
 %attr(755,root,root) %{_libdir}/libraw.so.5.*
