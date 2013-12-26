@@ -10,8 +10,8 @@
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
-Version:	0.14.7
-Release:	2
+Version:	0.15.4
+Release:	1
 %if %{with gpl3}
 License:	GPL v3+
 %else
@@ -24,11 +24,11 @@ License:	LGPL v2.1 or CDDL v1.0 or LibRaw Software License
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
 Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
-# Source0-md5:	8b622d82c927d8975c22ee4316584ebd
+# Source0-md5:	1f4388f66ae3657818fdbfb311be7766
 Source1:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{version}.tar.gz
-# Source1-md5:	a45c73d6bf9b4c112d5df9818e0a33f9
+# Source1-md5:	f6cd95013a47e1cef7a6ef1995c61ded
 Source2:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{version}.tar.gz
-# Source2-md5:	5fc14ee1fd66562cff3ee6895ca541a9
+# Source2-md5:	729895293f375d76eb96b00e399f3e05
 URL:		http://www.libraw.org/
 %{?with_gomp:BuildRequires:	gcc >= 6:4.2}
 BuildRequires:	jasper-devel
@@ -135,10 +135,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYRIGHT Changelog.txt LICENSE.LibRaw.pdf README README.demosaic-packs %{?with_gpl2:*.demosaic-pack-GPL2} %{?with_gpl3:*.demosaic-pack-GPL3}
 %lang(ru) %doc Changelog.rus README.demosaic-packs.rus
-%ghost %attr(755,root,root) %{_libdir}/libraw.so.5
-%attr(755,root,root) %{_libdir}/libraw.so.5.*
-%ghost %attr(755,root,root) %{_libdir}/libraw_r.so.5
-%attr(755,root,root) %{_libdir}/libraw_r.so.5.*
+%attr(755,root,root) %ghost %{_libdir}/libraw.so.?
+%attr(755,root,root) %{_libdir}/libraw.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.?
+%attr(755,root,root) %{_libdir}/libraw_r.so.*.*
 
 %files samples
 %defattr(644,root,root,755)
