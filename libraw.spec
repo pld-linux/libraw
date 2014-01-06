@@ -111,6 +111,8 @@ done
 
 %build
 %configure \
+	--enable-demosaic-pack-gpl2=%{?with_gpl2:LibRaw-demosaic-pack-GPL2-%{version}}%{!?with_gpl2:no} \
+	--enable-demosaic-pack-gpl3=%{?with_gpl3:LibRaw-demosaic-pack-GPL3-%{version}}%{!?with_gpl3:no} \
 	%{!?with_gomp:--disable-openmp}
 
 %{__make} \
@@ -135,10 +137,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc COPYRIGHT Changelog.txt LICENSE.LibRaw.pdf README README.demosaic-packs %{?with_gpl2:*.demosaic-pack-GPL2} %{?with_gpl3:*.demosaic-pack-GPL3}
 %lang(ru) %doc Changelog.rus README.demosaic-packs.rus
-%attr(755,root,root) %ghost %{_libdir}/libraw.so.?
-%attr(755,root,root) %{_libdir}/libraw.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.?
-%attr(755,root,root) %{_libdir}/libraw_r.so.*.*
+%attr(755,root,root) %{_libdir}/libraw.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libraw.so.9
+%attr(755,root,root) %{_libdir}/libraw_r.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.9
 
 %files samples
 %defattr(644,root,root,755)
