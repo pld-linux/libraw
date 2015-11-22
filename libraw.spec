@@ -10,8 +10,8 @@
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
-Version:	0.15.4
-Release:	2
+Version:	0.17.0
+Release:	1
 %if %{with gpl3}
 License:	GPL v3+
 %else
@@ -24,18 +24,22 @@ License:	LGPL v2.1 or CDDL v1.0 or LibRaw Software License
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
 Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
-# Source0-md5:	1f4388f66ae3657818fdbfb311be7766
+# Source0-md5:	f6d2b9dd22e63ac0f0bd3944489a81c6
 Source1:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{version}.tar.gz
-# Source1-md5:	f6cd95013a47e1cef7a6ef1995c61ded
+# Source1-md5:	291c83a5274b6ce0270131735f927adc
 Source2:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{version}.tar.gz
-# Source2-md5:	729895293f375d76eb96b00e399f3e05
+# Source2-md5:	141e24a0626b60e01dc9769cff14d499
+Patch0:		%{name}-nolocal.patch
 URL:		http://www.libraw.org/
+BuildRequires:	autoconf >= 2.50
+BuildRequires:	automake
 %{?with_gomp:BuildRequires:	gcc >= 6:4.2}
 BuildRequires:	jasper-devel
-BuildRequires:	lcms2-devel
+BuildRequires:	lcms2-devel >= 2
 %{?with_gomp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool
 BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -72,7 +76,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LibRaw
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	jasper-devel
-Requires:	lcms2-devel
+Requires:	lcms2-devel >= 2
 %{?with_gomp:Requires:	libgomp-devel}
 Requires:	libjpeg-devel
 Requires:	libstdc++-devel
@@ -97,6 +101,7 @@ Statyczna biblioteka LibRaw.
 
 %prep
 %setup -q -n LibRaw-%{version} %{?with_gpl2:-a1} %{?with_gpl3:-a2}
+%patch0 -p1
 
 %if %{with gpl2}
 for f in LibRaw-demosaic-pack-GPL2-%{version}/{COPYRIGHT,Changelog,README} ; do
@@ -110,6 +115,10 @@ done
 %endif
 
 %build
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__automake}
 %configure \
 	--enable-demosaic-pack-gpl2=%{?with_gpl2:LibRaw-demosaic-pack-GPL2-%{version}}%{!?with_gpl2:no} \
 	--enable-demosaic-pack-gpl3=%{?with_gpl3:LibRaw-demosaic-pack-GPL3-%{version}}%{!?with_gpl3:no} \
@@ -136,11 +145,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc COPYRIGHT Changelog.txt LICENSE.LibRaw.pdf README README.demosaic-packs %{?with_gpl2:*.demosaic-pack-GPL2} %{?with_gpl3:*.demosaic-pack-GPL3}
-%lang(ru) %doc Changelog.rus README.demosaic-packs.rus
 %attr(755,root,root) %{_libdir}/libraw.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libraw.so.9
+%attr(755,root,root) %ghost %{_libdir}/libraw.so.15
 %attr(755,root,root) %{_libdir}/libraw_r.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.9
+%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.15
 
 %files samples
 %defattr(644,root,root,755)
@@ -157,8 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/{index.html,*-eng.html}
-%lang(ru) %doc doc/*-rus.html
+%doc doc/*.html
 %attr(755,root,root) %{_libdir}/libraw.so
 %attr(755,root,root) %{_libdir}/libraw_r.so
 %{_libdir}/libraw.la
