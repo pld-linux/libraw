@@ -10,7 +10,7 @@
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
-Version:	0.17.0
+Version:	0.17.1
 Release:	1
 %if %{with gpl3}
 License:	GPL v3+
@@ -24,11 +24,11 @@ License:	LGPL v2.1 or CDDL v1.0 or LibRaw Software License
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
 Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
-# Source0-md5:	f6d2b9dd22e63ac0f0bd3944489a81c6
+# Source0-md5:	b56ace01e64aba9cda4f9e7f2821449d
 Source1:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{version}.tar.gz
-# Source1-md5:	291c83a5274b6ce0270131735f927adc
+# Source1-md5:	78902a6b0d4ca99037c1c2b4b8cfab44
 Source2:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{version}.tar.gz
-# Source2-md5:	141e24a0626b60e01dc9769cff14d499
+# Source2-md5:	2a40c2c073d649c8a5308f0f6bf86fb2
 Patch0:		%{name}-nolocal.patch
 URL:		http://www.libraw.org/
 BuildRequires:	autoconf >= 2.50
