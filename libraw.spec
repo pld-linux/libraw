@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	gomp	# OpenMP support
+%bcond_without	openmp	# OpenMP support
 %bcond_without	gpl2	# GPL v2+ demosaic pack
 %bcond_without	gpl3	# GPL v3+ demosaic pack
 #
@@ -33,10 +33,10 @@ Patch0:		%{name}-nolocal.patch
 URL:		http://www.libraw.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
-%{?with_gomp:BuildRequires:	gcc >= 6:4.2}
+%{?with_openmp:BuildRequires:	gcc >= 6:4.2}
 BuildRequires:	jasper-devel
 BuildRequires:	lcms2-devel >= 2
-%{?with_gomp:BuildRequires:	libgomp-devel}
+%{?with_openmp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
@@ -77,7 +77,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	jasper-devel
 Requires:	lcms2-devel >= 2
-%{?with_gomp:Requires:	libgomp-devel}
+%{?with_openmp:Requires:	libgomp-devel}
 Requires:	libjpeg-devel
 Requires:	libstdc++-devel
 
@@ -122,10 +122,10 @@ done
 %configure \
 	--enable-demosaic-pack-gpl2=%{?with_gpl2:LibRaw-demosaic-pack-GPL2-%{version}}%{!?with_gpl2:no} \
 	--enable-demosaic-pack-gpl3=%{?with_gpl3:LibRaw-demosaic-pack-GPL3-%{version}}%{!?with_gpl3:no} \
-	%{!?with_gomp:--disable-openmp}
+	%{!?with_openmp:--disable-openmp}
 
 %{__make} \
-	%{?with_gomp:lib_libraw_la_LIBADD=-lgomp lib_libraw_r_la_LIBADD=-lgomp}
+	%{?with_openmp:lib_libraw_la_LIBADD=-lgomp lib_libraw_r_la_LIBADD=-lgomp}
 
 %install
 rm -rf $RPM_BUILD_ROOT
