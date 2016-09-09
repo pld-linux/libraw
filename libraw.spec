@@ -10,7 +10,7 @@
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
-Version:	0.17.1
+Version:	0.17.2
 Release:	1
 %if %{with gpl3}
 License:	GPL v3+
@@ -24,12 +24,11 @@ License:	LGPL v2.1 or CDDL v1.0 or LibRaw Software License
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
 Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
-# Source0-md5:	b56ace01e64aba9cda4f9e7f2821449d
+# Source0-md5:	456626300777209def1ea784910f326a
 Source1:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{version}.tar.gz
-# Source1-md5:	78902a6b0d4ca99037c1c2b4b8cfab44
+# Source1-md5:	ec783ebbef29721935525169b1eb51f7
 Source2:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{version}.tar.gz
-# Source2-md5:	2a40c2c073d649c8a5308f0f6bf86fb2
-Patch0:		%{name}-nolocal.patch
+# Source2-md5:	a1100769a0b29af114e38cd4fe080717
 URL:		http://www.libraw.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -101,7 +100,6 @@ Statyczna biblioteka LibRaw.
 
 %prep
 %setup -q -n LibRaw-%{version} %{?with_gpl2:-a1} %{?with_gpl3:-a2}
-%patch0 -p1
 
 %if %{with gpl2}
 for f in LibRaw-demosaic-pack-GPL2-%{version}/{COPYRIGHT,Changelog,README} ; do
