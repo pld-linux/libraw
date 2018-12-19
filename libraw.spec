@@ -11,7 +11,8 @@
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
-Version:	0.18.1
+Version:	0.18.13
+%define	demosaic_ver	0.18.8
 Release:	1
 %if %{with gpl3}
 License:	GPL v3+
@@ -24,14 +25,14 @@ License:	LGPL v2.1 or CDDL v1.0
 %endif
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
-Source0:	http://www.libraw.org/data/LibRaw-%{version}.tar.gz
-# Source0-md5:	93d7a3fee17aa847bf976bff93cec7c7
-Source1:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{version}.tar.gz
-# Source1-md5:	d72112a0df65baa45254fa7517dd6e33
-Source2:	http://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{version}.tar.gz
-# Source2-md5:	8242ca0eef8daadc9fa450c25ee275ba
+Source0:	https://www.libraw.org/data/LibRaw-%{version}.tar.gz
+# Source0-md5:	b7b65b3f05f4b4b570b07799b1a5a467
+Source1:	https://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{demosaic_ver}.tar.gz
+# Source1-md5:	68b821b4a72054d0c0908e4d7b16fcfe
+Source2:	https://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{demosaic_ver}.tar.gz
+# Source2-md5:	260cd142472027c8f7710a1a4edc9975
 Patch0:		%{name}-zlib.patch
-URL:		http://www.libraw.org/
+URL:		https://www.libraw.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %{?with_openmp:BuildRequires:	gcc >= 6:4.2}
@@ -108,12 +109,12 @@ Statyczna biblioteka LibRaw.
 %patch0 -p1
 
 %if %{with gpl2}
-for f in LibRaw-demosaic-pack-GPL2-%{version}/{COPYRIGHT,Changelog,README} ; do
+for f in LibRaw-demosaic-pack-GPL2-%{demosaic_ver}/{COPYRIGHT,Changelog,README} ; do
 	cp -p $f $(basename $f).demosaic-pack-GPL2
 done
 %endif
 %if %{with gpl3}
-for f in LibRaw-demosaic-pack-GPL3-%{version}/{COPYRIGHT,Changelog,README} ; do
+for f in LibRaw-demosaic-pack-GPL3-%{demosaic_ver}/{COPYRIGHT,Changelog,README} ; do
 	cp -p $f $(basename $f).demosaic-pack-GPL3
 done
 %endif
@@ -124,8 +125,8 @@ done
 %{__autoconf}
 %{__automake}
 %configure \
-	--enable-demosaic-pack-gpl2=%{?with_gpl2:LibRaw-demosaic-pack-GPL2-%{version}}%{!?with_gpl2:no} \
-	--enable-demosaic-pack-gpl3=%{?with_gpl3:LibRaw-demosaic-pack-GPL3-%{version}}%{!?with_gpl3:no} \
+	--enable-demosaic-pack-gpl2=%{?with_gpl2:LibRaw-demosaic-pack-GPL2-%{demosaic_ver}}%{!?with_gpl2:no} \
+	--enable-demosaic-pack-gpl3=%{?with_gpl3:LibRaw-demosaic-pack-GPL3-%{demosaic_ver}}%{!?with_gpl3:no} \
 	%{!?with_openmp:--disable-openmp} \
 	%{?with_zlib:--enable-zlib}
 
