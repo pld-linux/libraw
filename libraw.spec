@@ -1,37 +1,18 @@
 #
 # Conditional build:
 %bcond_without	openmp	# OpenMP support
-%bcond_without	gpl2	# GPL v2+ demosaic pack
-%bcond_without	gpl3	# GPL v3+ demosaic pack
 %bcond_without	zlib	# ZLIB for deflated DNG format support
 #
-%if %{without gpl2}
-%undefine	gpl3
-%endif
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
 Name:		libraw
-Version:	0.18.13
-%define	demosaic_ver	0.18.8
+Version:	0.20.2
 Release:	1
-%if %{with gpl3}
-License:	GPL v3+
-%else
-%if %{with gpl2}
-License:	GPL v2+
-%else
 License:	LGPL v2.1 or CDDL v1.0
-%endif
-%endif
 Group:		Libraries
 #Source0Download: http://www.libraw.org/download#stable
 Source0:	https://www.libraw.org/data/LibRaw-%{version}.tar.gz
-# Source0-md5:	b7b65b3f05f4b4b570b07799b1a5a467
-Source1:	https://www.libraw.org/data/LibRaw-demosaic-pack-GPL2-%{demosaic_ver}.tar.gz
-# Source1-md5:	68b821b4a72054d0c0908e4d7b16fcfe
-Source2:	https://www.libraw.org/data/LibRaw-demosaic-pack-GPL3-%{demosaic_ver}.tar.gz
-# Source2-md5:	260cd142472027c8f7710a1a4edc9975
-Patch0:		%{name}-zlib.patch
+# Source0-md5:	2e5bedb59ea433e2d2ef6bbbe5253179
 URL:		https://www.libraw.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -81,7 +62,7 @@ Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	jasper-devel
 Requires:	lcms2-devel >= 2
-%{?with_openmp:Requires:	libgomp-devel}
+%{?with_openmp:Requires: libgomp-devel}
 Requires:	libjpeg-devel >= 8
 Requires:	libstdc++-devel
 %{?with_zlib:Requires:	zlib-devel >= 1.2.3.3}
@@ -105,19 +86,7 @@ Static LibRaw library.
 Statyczna biblioteka LibRaw.
 
 %prep
-%setup -q -n LibRaw-%{version} %{?with_gpl2:-a1} %{?with_gpl3:-a2}
-%patch0 -p1
-
-%if %{with gpl2}
-for f in LibRaw-demosaic-pack-GPL2-%{demosaic_ver}/{COPYRIGHT,Changelog,README} ; do
-	cp -p $f $(basename $f).demosaic-pack-GPL2
-done
-%endif
-%if %{with gpl3}
-for f in LibRaw-demosaic-pack-GPL3-%{demosaic_ver}/{COPYRIGHT,Changelog,README} ; do
-	cp -p $f $(basename $f).demosaic-pack-GPL3
-done
-%endif
+%setup -q -n LibRaw-%{version}
 
 %build
 %{__libtoolize}
@@ -125,13 +94,10 @@ done
 %{__autoconf}
 %{__automake}
 %configure \
-	--enable-demosaic-pack-gpl2=%{?with_gpl2:LibRaw-demosaic-pack-GPL2-%{demosaic_ver}}%{!?with_gpl2:no} \
-	--enable-demosaic-pack-gpl3=%{?with_gpl3:LibRaw-demosaic-pack-GPL3-%{demosaic_ver}}%{!?with_gpl3:no} \
 	%{!?with_openmp:--disable-openmp} \
 	%{?with_zlib:--enable-zlib}
 
-%{__make} \
-	%{?with_openmp:lib_libraw_la_LIBADD=-lgomp lib_libraw_r_la_LIBADD=-lgomp}
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -153,11 +119,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc COPYRIGHT Changelog.txt README README.demosaic-packs %{?with_gpl2:*.demosaic-pack-GPL2} %{?with_gpl3:*.demosaic-pack-GPL3}
+%doc COPYRIGHT Changelog.txt README.md LICENSE.CDDL LICENSE.LGPL
 %attr(755,root,root) %{_libdir}/libraw.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libraw.so.16
+%attr(755,root,root) %ghost %{_libdir}/libraw.so.20
 %attr(755,root,root) %{_libdir}/libraw_r.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.16
+%attr(755,root,root) %ghost %{_libdir}/libraw_r.so.20
 
 %files samples
 %defattr(644,root,root,755)
@@ -169,6 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/multirender_test
 %attr(755,root,root) %{_bindir}/postprocessing_benchmark
 %attr(755,root,root) %{_bindir}/raw-identify
+%attr(755,root,root) %{_bindir}/rawtextdump
 %attr(755,root,root) %{_bindir}/simple_dcraw
 %attr(755,root,root) %{_bindir}/unprocessed_raw
 
