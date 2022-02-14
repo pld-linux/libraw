@@ -1,0 +1,26 @@
+--- LibRaw-0.20.2/libraw/libraw_types.h~	2020-10-15 07:06:07.000000000 +0200
++++ LibRaw-0.20.2/libraw/libraw_types.h	2022-02-14 22:27:43.313433599 +0100
+@@ -92,8 +92,8 @@
+   typedef __int64 INT64;
+   typedef unsigned __int64 UINT64;
+ #else
+-typedef long long INT64;
+-typedef unsigned long long UINT64;
++typedef int64_t INT64;
++typedef uint64_t UINT64;
+ #endif
+ 
+   typedef unsigned char uchar;
+--- LibRaw-0.20.2/internal/defines.h~	2020-10-15 07:06:07.000000000 +0200
++++ LibRaw-0.20.2/internal/defines.h	2022-02-14 22:29:12.905376208 +0100
+@@ -60,8 +60,8 @@
+ #include <unistd.h>
+ #include <utime.h>
+ #include <netinet/in.h>
+-typedef long long INT64;
+-typedef unsigned long long UINT64;
++typedef int64_t INT64;
++typedef uint64_t UINT64;
+ #endif
+ 
+ #ifdef NODEPS
