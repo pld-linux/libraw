@@ -88,7 +88,7 @@ Statyczna biblioteka LibRaw.
 
 %prep
 %setup -q -n LibRaw-%{version}
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 %{__libtoolize}
