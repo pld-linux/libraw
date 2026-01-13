@@ -18,7 +18,6 @@ URL:		https://www.libraw.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 %{?with_openmp:BuildRequires:	gcc >= 6:4.2}
-BuildRequires:	jasper-devel
 BuildRequires:	lcms2-devel >= 2
 %{?with_openmp:BuildRequires:	libgomp-devel}
 BuildRequires:	libjpeg-devel >= 8
@@ -61,7 +60,6 @@ Summary:	Header files for LibRaw
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki LibRaw
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	jasper-devel
 Requires:	lcms2-devel >= 2
 %{?with_openmp:Requires: libgomp-devel}
 Requires:	libjpeg-devel >= 8
