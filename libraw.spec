@@ -1,7 +1,8 @@
 #
 # Conditional build:
-%bcond_without	openmp	# OpenMP support
-%bcond_without	zlib	# ZLIB for deflated DNG format support
+%bcond_without	openmp		# OpenMP support
+%bcond_without	zlib		# ZLIB for deflated DNG format support
+%bcond_without	static_libs	# static libraries
 #
 Summary:	LibRaw - a library for reading RAW files
 Summary(pl.UTF-8):	LibRaw - biblioteka do odczytu plików RAW
@@ -24,6 +25,7 @@ BuildRequires:	libjpeg-devel >= 8
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
+BuildRequires:	rpmbuild(macros) >= 1.527
 # zlib with pkgconfig support
 %{?with_zlib:BuildRequires:	zlib-devel >= 1.2.3.3}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -94,6 +96,7 @@ Statyczna biblioteka LibRaw.
 %{__autoconf}
 %{__automake}
 %configure \
+	%{__enable_disable static_libs static} \
 	%{!?with_openmp:--disable-openmp} \
 	%{?with_zlib:--enable-zlib}
 
@@ -148,7 +151,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/libraw.pc
 %{_pkgconfigdir}/libraw_r.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libraw.a
 %{_libdir}/libraw_r.a
+%endif
